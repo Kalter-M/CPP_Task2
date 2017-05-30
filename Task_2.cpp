@@ -90,6 +90,46 @@ std::string InputFileName()
 	return name + ".txt";
 }
 
+void SubAction(EmpContainer& sub, std::string c, bool& flag)
+{
+	std::cout << " Размер подсписка: " << sub.Size() << "\n";
+	std::cout << "-------------------------------------" << std::endl;
+	std::cout << " 1)Вывод в консоль" << std::endl;
+	std::cout << " 2)Вывод в файл" << std::endl;
+	std::cout << " 0)Выход" << std::endl;
+	std::cout << "------------------------------" << std::endl;
+	std::cout << "Введите команду: ";
+	std::cin >> c;
+	try
+	{
+		std::string FName;
+
+		int n = std::stoi(c);
+		switch (n)
+		{
+		case 1:
+			ConsoleOutput(sub);
+			flag = false;
+			break;
+		case 2:
+			FName = InputFileName();
+			sub.FileOutput(std::fstream(FName, std::ios::out));
+			flag = false;
+			break;
+		case 0:
+			flag = false;
+			break;
+		default:
+			std::cout << "Неверная команда!" << std::endl;
+			break;
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Неверная команда!" << std::endl;
+	}
+}
+
 
 int main()
 {
@@ -484,42 +524,7 @@ int main()
 							sub = cont.FindSubVectByDepartment(InputInt());
 							flag = true;
 							while (flag)
-							{
-								std::cout << " Размер подсписка: " << sub.Size() << "\n";
-								std::cout << "-------------------------------------" << std::endl;
-								std::cout << " 1)Вывод в консоль" << std::endl;
-								std::cout << " 2)Вывод в файл" << std::endl;
-								std::cout << " 0)Выход" << std::endl;
-								std::cout << "------------------------------" << std::endl;
-								std::cout << "Введите команду: ";
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										ConsoleOutput(sub);
-										flag = false;
-										break;
-									case 2:
-										FName = InputFileName();
-										sub.FileOutput(std::fstream(FName, std::ios::out));
-										flag = false;
-										break;
-									case 0:
-										flag = false;
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (std::exception& e)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
-							}
+								SubAction(sub, c, flag);
 							break;
 						case 2:
 							std::cout << "Введите фамилию: ";
@@ -528,40 +533,7 @@ int main()
 							flag = true;
 							while (flag)
 							{
-								std::cout << " Размер подсписка: " << sub.Size() << "\n";
-								std::cout << "-------------------------------------" << std::endl;
-								std::cout << " 1)Вывод в консоль" << std::endl;
-								std::cout << " 2)Вывод в файл" << std::endl;
-								std::cout << " 0)Выход" << std::endl;
-								std::cout << "------------------------------" << std::endl;
-								std::cout << "Введите команду: ";
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										ConsoleOutput(sub);
-										flag = false;
-										break;
-									case 2:
-										FName = InputFileName();
-										sub.FileOutput(std::fstream(FName, std::ios::out));
-										flag = false;
-										break;
-									case 0:
-										flag = false;
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (std::exception& e)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
+								SubAction(sub, c, flag);
 							}
 							break;
 						case 3:
@@ -570,40 +542,7 @@ int main()
 							flag = true;
 							while (flag)
 							{
-								std::cout << " Размер подсписка: " << sub.Size() << "\n";
-								std::cout << "-------------------------------------" << std::endl;
-								std::cout << " 1)Вывод в консоль" << std::endl;
-								std::cout << " 2)Вывод в файл" << std::endl;
-								std::cout << " 0)Выход" << std::endl;
-								std::cout << "------------------------------" << std::endl;
-								std::cout << "Введите команду: ";
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										ConsoleOutput(sub);
-										flag = false;
-										break;
-									case 2:
-										FName = InputFileName();
-										sub.FileOutput(std::fstream(FName, std::ios::out));
-										flag = false;
-										break;
-									case 0:
-										flag = false;
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (std::exception& e)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
+								SubAction(sub, c, flag);
 							}
 							break;
 
@@ -614,40 +553,7 @@ int main()
 							flag = true;
 							while (flag)
 							{
-								std::cout << " Размер подсписка: " << sub.Size() << "\n";
-								std::cout << "-------------------------------------" << std::endl;
-								std::cout << " 1)Вывод в консоль" << std::endl;
-								std::cout << " 2)Вывод в файл" << std::endl;
-								std::cout << " 0)Выход" << std::endl;
-								std::cout << "------------------------------" << std::endl;
-								std::cout << "Введите команду: ";
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										ConsoleOutput(sub);
-										flag = false;
-										break;
-									case 2:
-										FName = InputFileName();
-										sub.FileOutput(std::fstream(FName, std::ios::out));
-										flag = false;
-										break;
-									case 0:
-										flag = false;
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (std::exception& e)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
+								SubAction(sub, c, flag);
 							}
 						case 0: flag = false;
 						}
