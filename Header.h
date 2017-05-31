@@ -400,8 +400,12 @@ public:
 	template<class Predicate>
 	bool FindBy(Predicate &pred, std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> &it)
 	{
-		it = std::find_if(vect.begin(), vect.end(), pred);
-		return it != vect.end();
+		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> tmpIt;
+		tmpIt = std::find_if(vect.begin(), vect.end(), pred);
+		if (tmpIt == vect.end())
+			return false;
+		it = tmpIt;
+		return true;
 	}
 
 	template<class Comparator>
@@ -410,7 +414,7 @@ public:
 		std::sort(vect.begin(), vect.end(), comp);
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> tmpIt;
 		tmpIt = std::lower_bound(vect.begin(), vect.end(), bibb, comp);
-		if (tmpIt == vect.end())
+		if (tmpIt == vect.end() && !comp(bibb, *tmpIt))
 			return false;
 		it = tmpIt;
 		return true;
@@ -627,30 +631,32 @@ void ConsoleOutput(EmpContainer& cont)
 	}
 }
 
-float InputFloat(std::string message = "", float min = 0, float max = 10000)
+dec::decimal<2> InputDecimal(std::string message = "", dec::decimal<2> min = (dec::decimal<2>)0, dec::decimal<2> max = (dec::decimal<2>)100000)
 {
 	std::string str;
-	float res;
+	dec::decimal<2> res;
 
 	while (true) {
 		std::cout << message;
 		try {
 			std::cin >> str;
 			if (str == "выход") throw "выход";
-			res = std::stof(str);
+			res = dec::decimal_cast<2>(str);
 			while (res < min || res > max) {
-				std::cout << "Ошибка (значение < " << min << " или значение > " << max << "). Повторите: ";
-				std::cin >> res;
+				std::cout << "Ошибка (значение < " << min << " или значение > " << max << "). Повторите: " << std::endl;
+				std::cin >> str;
+				res = dec::decimal_cast<2>(str);
 			}
+			std::cout << std::endl;
 			return res;
 		}
-		catch (std::exception &e) {
+		catch (...) {
 			std::cout << "Невереное число!" << std::endl;
 		}
 	}
 }
 
-int InputInt(std::string message = "", int min = 0, int max = INT_MAX)
+int InputInt(std::string message = "", int min = 0, int max = 1000000)
 {
 	std::string str;
 	int res;
@@ -665,13 +671,14 @@ int InputInt(std::string message = "", int min = 0, int max = INT_MAX)
 			res = std::stoi(str);
 			while (res < min || res > max)
 			{
-				std::cout << "Ошибка (значение < " << min << " или значение > " << max << "). Повторите: ";
-				std::cin >> res;
+				std::cout << "Ошибка (значение < " << min << " или значение > " << max << "). Повторите: " << std::endl;
+				std::cin >> str;
+				res = std::stoi(str);
 			}
 			std::cout << std::endl;
 			return res;
 		}
-		catch (std::exception& e)
+		catch (...)
 		{
 			std::cout << "Невереное число!" << std::endl;
 		}
@@ -720,16 +727,16 @@ Employee InputEmployee()
 	std::cin >> _Name;
 	std::cout << std::endl;
 
-	_Salary = InputFloat("Оклад: ");
+	_Salary = InputDecimal("Оклад: ");
 
 	_EnrollmentDate = InputDate();
 
-	_Overhead = InputFloat("Процент надбавки: ");
-	_IncomeTax = InputFloat("Подоходный налог: ");
-	_DaysWorked = InputInt("Отработано дней: ");
-	_AllWorkingDays = InputInt("Рабочих дней в месяце: ");
-	_Accrued = InputFloat("Начислено: ");
-	_Withheld = InputFloat("Удержано: ");
+	_Overhead = InputDecimal("Процент надбавки: ");
+	_IncomeTax = InputDecimal("Подоходный налог: ");
+	_DaysWorked = InputInt("Отработано дней: ", 0, 31);
+	_AllWorkingDays = InputInt("Рабочих дней в месяце: ", 0, 31);
+	_Accrued = InputDecimal("Начислено: ");
+	_Withheld = InputDecimal("Удержано: ");
 
 	return Employee(_PersonnelNumber, _Department, _Name, _Salary, _EnrollmentDate, _Overhead, _IncomeTax, _DaysWorked,
 		_AllWorkingDays, _Accrued, _Withheld);
@@ -741,8 +748,6 @@ void InputEmployeChange(std::vector<Employee>::iterator &it)
 	std::cout << "Введите = чтобы пропустить" << std::endl;
 
 	std::string tmpstr = "";
-
-	int tmpint;
 
 	std::cout << "Введите табельный номер(текущее " + std::to_string(it->PersonnelNumber) + "): ";
 	std::cin >> tmpstr;
@@ -797,5 +802,5 @@ void InputEmployeChange(std::vector<Employee>::iterator &it)
 
 static void PrintHead()
 {
-	std::cout << "табельный №\t" << "№ отдела\t" << "фамилия\t" << "оклад\t" << "дата поступления\t" << "надбавка\n" << "отработанно\n" << "рабочих дней\n" << "начислено\n" << "удержано\n";
+	std::cout << "табельный №\t" << "№ отдела\t" << "фамилия\t" << "оклад\t" << "дата поступления\t" << "надбавка\t" << "отработанно\t" << "рабочих дней\t" << "начислено\t" << "удержано\n";
 }

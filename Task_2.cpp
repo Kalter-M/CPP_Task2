@@ -124,7 +124,7 @@ void SubAction(EmpContainer& sub, std::string c, bool& flag)
 			break;
 		}
 	}
-	catch (std::exception& e)
+	catch (...)
 	{
 		std::cout << "Неверная команда!" << std::endl;
 	}
@@ -184,7 +184,7 @@ int main()
 							break;
 						}
 					}
-					catch (std::exception& e)
+					catch (...)
 					{
 						std::cout << "Неверная команда!" << std::endl;
 					}
@@ -218,7 +218,7 @@ int main()
 							break;
 						}
 					}
-					catch (std::exception& e)
+					catch (...)
 					{
 						std::cout << "Неверная команда!" << std::endl;
 					}
@@ -251,7 +251,7 @@ int main()
 							break;
 						}
 					}
-					catch (std::exception& e)
+					catch (...)
 					{
 						std::cout << "Неверная команда!" << std::endl;
 					}
@@ -273,7 +273,7 @@ int main()
 							{
 								found = cont.FindByDepartmentBinary(InputInt(), it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							else
@@ -281,7 +281,7 @@ int main()
 							{
 								found = cont.FindByDepartment(InputInt(), it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							if (found)
@@ -314,7 +314,7 @@ int main()
 											break;
 										}
 									}
-									catch (std::exception& e)
+									catch (...)
 									{
 										std::cout << "Неверная команда!" << std::endl;
 									}
@@ -332,7 +332,7 @@ int main()
 							{
 								found = cont.FindByNameBinary(str, it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							else
@@ -340,7 +340,7 @@ int main()
 							{
 								found = cont.FindByName(str, it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							if (found)
@@ -367,7 +367,7 @@ int main()
 										break;
 									}
 								}
-								catch (std::exception& e)
+								catch (...)
 								{
 									std::cout << "Неверная команда!" << std::endl;
 								}
@@ -382,7 +382,7 @@ int main()
 							{
 								found = cont.FindByEnrollmentDateBinary(InputDate(), it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							else
@@ -390,7 +390,7 @@ int main()
 							{
 								found = cont.FindByEnrollmentDate(InputDate(), it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							if (found)
@@ -423,7 +423,7 @@ int main()
 											break;
 										}
 									}
-									catch (std::exception& e)
+									catch (...)
 									{
 										std::cout << "Неверная команда!" << std::endl;
 									}
@@ -441,7 +441,7 @@ int main()
 							{
 								found = cont.FindBySalaryBinary(tempdec, it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							else
@@ -449,7 +449,7 @@ int main()
 							{
 								found = cont.FindBySalary(tempdec, it);
 							}
-							catch (const char* str) {
+							catch (...) {
 								flag = false;
 							}
 							if (found)
@@ -476,7 +476,7 @@ int main()
 										break;
 									}
 								}
-								catch (std::exception& e)
+								catch (...)
 								{
 									std::cout << "Неверная команда!" << std::endl;
 								}
@@ -493,7 +493,7 @@ int main()
 							break;
 						}
 					}
-					catch (std::exception& e)
+					catch (...)
 					{
 						std::cout << "Неверная команда!" << std::endl;
 					}
@@ -504,7 +504,7 @@ int main()
 				{
 					cont.Add(InputEmployee());
 				}
-				catch (const char* str) {
+				catch (...) {
 					flag = false;
 				}
 				break;
@@ -558,7 +558,7 @@ int main()
 						case 0: flag = false;
 						}
 					}
-					catch (std::exception& e)
+					catch (...)
 					{
 						std::cout << "Неверная команда!" << std::endl;
 					}
@@ -573,7 +573,7 @@ int main()
 				break;
 			}
 		}
-		catch (std::exception& e)
+		catch (...)
 		{
 			std::cout << "Неверная команда!" << std::endl;
 		}
