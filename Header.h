@@ -73,10 +73,7 @@ public:
 		Withheld = 0;
 	}
 
-	~Employee()
-	{	
-		EnrollmentDate.~Date();
-	}
+	~Employee()	{}
 
 	bool operator==(const Employee& that) const
 	{
@@ -374,13 +371,13 @@ public:
 	~Container() {}
 
 	bool Add(T el) {
-		if (!Find(el))
-		{
+		//if (!Find(el))
+		//{
 			vect.push_back(el);
 			return true;
-		}
-		else
-			return false;
+		//}
+		//else
+		//	return false;
 	}
 
 
@@ -568,6 +565,7 @@ public:
 				Add(emp);
 				emp = *is++;
 			}
+			if (emp.PersonnelNumber != 0)
 			Add(emp);
 			fin.close();
 		}
@@ -592,6 +590,8 @@ public:
 	}
 
 };
+
+
 
 static void PrintHead();
 
@@ -719,7 +719,7 @@ Employee InputEmployee()
 
 	std::cout << "Ввод информации о сотруднике" << std::endl;
 
-	_PersonnelNumber = InputInt("Табельный номер: ");
+	_PersonnelNumber = InputInt("Табельный номер: ", 1);
 
 	_Department = InputInt("Номер отдела: ");
 

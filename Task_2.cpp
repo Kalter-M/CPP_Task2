@@ -109,12 +109,10 @@ void SubAction(EmpContainer& sub, std::string c, bool& flag)
 		{
 		case 1:
 			ConsoleOutput(sub);
-			flag = false;
 			break;
 		case 2:
 			FName = InputFileName();
 			sub.FileOutput(std::fstream(FName, std::ios::out));
-			flag = false;
 			break;
 		case 0:
 			flag = false;
@@ -139,7 +137,6 @@ int main()
 	EmpContainer sub;
 	std::string c;
 	std::string str;
-	dec::decimal<2> tempdec;
 	int n;
 	bool flag;
 	bool binarySearch;
@@ -225,278 +222,284 @@ int main()
 				}
 				break;
 			case 3:
-				flag = true;
-				while (flag)
+				try
 				{
-					PrintMenuSearch();
-					std::cin >> c;
-					try
+					flag = true;
+					while (flag)
 					{
-						n = std::stoi(c);
-						switch (n)
+						PrintMenuSearch();
+						std::cin >> c;
+						try
 						{
-						case 1:
-							binarySearch = false;
-							flag = false;
-							break;
-						case 2:
-							binarySearch = true;
-							flag = false;
-							break;
-						case 0:
-							flag = false;
-							break;
-						default:
+							n = std::stoi(c);
+							switch (n)
+							{
+							case 1:
+								binarySearch = false;
+								flag = false;
+								break;
+							case 2:
+								binarySearch = true;
+								flag = false;
+								break;
+							case 0:
+								flag = false;
+								break;
+							default:
+								std::cout << "Неверная команда!" << std::endl;
+								break;
+							}
+						}
+						catch (...)
+						{
 							std::cout << "Неверная команда!" << std::endl;
-							break;
 						}
 					}
-					catch (...)
+					flag = true;
+					while (flag)
 					{
-						std::cout << "Неверная команда!" << std::endl;
+						PrintMenuFindParam();
+						std::cin >> c;
+						try
+						{
+							n = std::stoi(c);
+							switch (n)
+							{
+							case 1:
+								std::cout << "Введите номер отдела: ";
+								if (binarySearch)
+									try
+								{
+									found = cont.FindByDepartmentBinary(InputInt(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								else
+									try
+								{
+									found = cont.FindByDepartment(InputInt(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								if (found)
+								{
+									std::cout << "Запись найдена! \n";
+									while (flag)
+									{
+										PrintAction();
+										std::cin >> c;
+										try
+										{
+											n = std::stoi(c);
+											switch (n)
+											{
+											case 1:
+												std::cout << *it;
+												break;
+											case 2:
+												cont.Change(it);
+												break;
+											case 3:
+												cont.Remove(it);
+												flag = false;
+												break;
+											case 0:
+												flag = false;
+												break;
+											default:
+												std::cout << "Неверная команда!" << std::endl;
+												break;
+											}
+										}
+										catch (...)
+										{
+											std::cout << "Неверная команда!" << std::endl;
+										}
+									}
+								}
+								else
+									std::cout << "Запись не найдена \n";
+								flag = false;
+								break;
+							case 2:
+								std::cout << "Введите фамилию: ";
+								std::cin >> str;
+								if (binarySearch)
+									try
+								{
+									found = cont.FindByNameBinary(str, it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								else
+									try
+								{
+									found = cont.FindByName(str, it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								if (found)
+								{
+									std::cout << "Запись найдена \n";
+									PrintAction();
+									std::cin >> c;
+									try
+									{
+										n = std::stoi(c);
+										switch (n)
+										{
+										case 1:
+											std::cout << *it;
+											break;
+										case 2:
+											cont.Change(it);
+											break;
+										case 3:
+											cont.Remove(it);
+											break;
+										default:
+											std::cout << "Неверная команда!" << std::endl;
+											break;
+										}
+									}
+									catch (...)
+									{
+										std::cout << "Неверная команда!" << std::endl;
+									}
+								}
+								else
+									std::cout << "Запись не найдена \n";
+								flag = false;
+								break;
+							case 3:
+								if (binarySearch)
+									try
+								{
+									found = cont.FindByEnrollmentDateBinary(InputDate(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								else
+									try
+								{
+									found = cont.FindByEnrollmentDate(InputDate(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								if (found)
+								{
+									std::cout << "Запись найдена! \n";
+									while (flag)
+									{
+										PrintAction();
+										std::cin >> c;
+										try
+										{
+											n = std::stoi(c);
+											switch (n)
+											{
+											case 1:
+												std::cout << *it;
+												break;
+											case 2:
+												cont.Change(it);
+												break;
+											case 3:
+												cont.Remove(it);
+												flag = false;
+												break;
+											case 0:
+												flag = false;
+												break;
+											default:
+												std::cout << "Неверная команда!" << std::endl;
+												break;
+											}
+										}
+										catch (...)
+										{
+											std::cout << "Неверная команда!" << std::endl;
+										}
+									}
+								}
+								else
+									std::cout << "Запись не найдена \n";
+								flag = false;
+								break;
+							case 4:
+								std::cout << "Введите оклад: ";
+								if (binarySearch)
+									try
+								{
+									found = cont.FindBySalaryBinary(InputDecimal(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								else
+									try
+								{
+									found = cont.FindBySalary(InputDecimal(), it);
+								}
+								catch (...) {
+									flag = false;
+								}
+								if (found)
+								{
+									std::cout << "Запись найдена! \n";
+									PrintAction();
+									std::cin >> c;
+									try
+									{
+										n = std::stoi(c);
+										switch (n)
+										{
+										case 1:
+											std::cout << *it;
+											break;
+										case 2:
+											cont.Change(it);
+											break;
+										case 3:
+											cont.Remove(it);
+											break;
+										default:
+											std::cout << "Неверная команда!" << std::endl;
+											break;
+										}
+									}
+									catch (...)
+									{
+										std::cout << "Неверная команда!" << std::endl;
+									}
+								}
+								else
+									std::cout << "Запись не найдена! \n";
+								flag = false;
+								break;
+							case 0:
+								flag = false;
+								break;
+							default:
+								std::cout << "Неверная команда!" << std::endl;
+								break;
+							}
+						}
+						catch (...)
+						{
+							std::cout << "Неверная команда!" << std::endl;
+						}
 					}
 				}
-				flag = true;
-				while (flag)
+				catch (...) 
 				{
-					PrintMenuFindParam();
-					std::cin >> c;
-					try
-					{
-						n = std::stoi(c);
-						switch (n)
-						{
-						case 1:
-							std::cout << "Введите номер отдела: ";
-							if (binarySearch)
-								try
-							{
-								found = cont.FindByDepartmentBinary(InputInt(), it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							else
-								try
-							{
-								found = cont.FindByDepartment(InputInt(), it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							if (found)
-							{
-								std::cout << "Запись найдена! \n";
-								while (flag)
-								{
-									PrintAction();
-									std::cin >> c;
-									try
-									{
-										n = std::stoi(c);
-										switch (n)
-										{
-										case 1:
-											std::cout << *it;
-											break;
-										case 2:
-											cont.Change(it);
-											break;
-										case 3:
-											cont.Remove(it);
-											flag = false;
-											break;
-										case 0:
-											flag = false;
-											break;
-										default:
-											std::cout << "Неверная команда!" << std::endl;
-											break;
-										}
-									}
-									catch (...)
-									{
-										std::cout << "Неверная команда!" << std::endl;
-									}
-								}
-							}
-							else
-								std::cout << "Запись не найдена \n";
-							flag = false;
-							break;
-						case 2:
-							std::cout << "Введите фамилию: ";
-							std::cin >> str;
-							if (binarySearch)
-								try
-							{
-								found = cont.FindByNameBinary(str, it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							else
-								try
-							{
-								found = cont.FindByName(str, it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							if (found)
-							{
-								std::cout << "Запись найдена \n";
-								PrintAction();
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										std::cout << *it;
-										break;
-									case 2:
-										cont.Change(it);
-										break;
-									case 3:
-										cont.Remove(it);
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (...)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
-							}
-							else
-								std::cout << "Запись не найдена \n";
-							flag = false;
-							break;
-						case 3:
-							if (binarySearch)
-								try
-							{
-								found = cont.FindByEnrollmentDateBinary(InputDate(), it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							else
-								try
-							{
-								found = cont.FindByEnrollmentDate(InputDate(), it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							if (found)
-							{
-								std::cout << "Запись найдена! \n";
-								while (flag)
-								{
-									PrintAction();
-									std::cin >> c;
-									try
-									{
-										n = std::stoi(c);
-										switch (n)
-										{
-										case 1:
-											std::cout << *it;
-											break;
-										case 2:
-											cont.Change(it);
-											break;
-										case 3:
-											cont.Remove(it);
-											flag = false;
-											break;
-										case 0:
-											flag = false;
-											break;
-										default:
-											std::cout << "Неверная команда!" << std::endl;
-											break;
-										}
-									}
-									catch (...)
-									{
-										std::cout << "Неверная команда!" << std::endl;
-									}
-								}
-							}
-							else
-								std::cout << "Запись не найдена \n";
-							flag = false;
-							break;
-						case 4:
-							std::cout << "Введите оклад: ";
-							std::cin >> tempdec;
-							if (binarySearch)
-								try
-							{
-								found = cont.FindBySalaryBinary(tempdec, it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							else
-								try
-							{
-								found = cont.FindBySalary(tempdec, it);
-							}
-							catch (...) {
-								flag = false;
-							}
-							if (found)
-							{
-								std::cout << "Запись найдена! \n";
-								PrintAction();
-								std::cin >> c;
-								try
-								{
-									n = std::stoi(c);
-									switch (n)
-									{
-									case 1:
-										std::cout << *it;
-										break;
-									case 2:
-										cont.Change(it);
-										break;
-									case 3:
-										cont.Remove(it);
-										break;
-									default:
-										std::cout << "Неверная команда!" << std::endl;
-										break;
-									}
-								}
-								catch (...)
-								{
-									std::cout << "Неверная команда!" << std::endl;
-								}
-							}
-							else
-								std::cout << "Запись не найдена! \n";
-							flag = false;
-							break;
-						case 0:
-							flag = false;
-							break;
-						default:
-							std::cout << "Неверная команда!" << std::endl;
-							break;
-						}
-					}
-					catch (...)
-					{
-						std::cout << "Неверная команда!" << std::endl;
-					}
+					flag = false;
 				}
 				break;
 			case 4:
@@ -532,29 +535,22 @@ int main()
 							sub = cont.FindSubVectByName(str);
 							flag = true;
 							while (flag)
-							{
 								SubAction(sub, c, flag);
-							}
 							break;
 						case 3:
 							std::cout << "Введите дату поступления: ";
 							sub = cont.FindSubVectByEnrollmentDate(InputDate());
 							flag = true;
 							while (flag)
-							{
 								SubAction(sub, c, flag);
-							}
 							break;
 
 						case 4:
 							std::cout << "Введите оклад: ";
-							std::cin >> tempdec;
-							sub = cont.FindSubVectBySalary(tempdec);
+							sub = cont.FindSubVectBySalary(InputDecimal());
 							flag = true;
 							while (flag)
-							{
 								SubAction(sub, c, flag);
-							}
 						case 0: flag = false;
 						}
 					}
