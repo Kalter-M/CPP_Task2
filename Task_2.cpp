@@ -128,6 +128,50 @@ void SubAction(EmpContainer& sub, std::string c, bool& flag)
 	}
 }
 
+void SearchAction(bool found, EmpContainer& cont, std::vector<Employee>::iterator& it, std::string c, bool& flag)
+{
+	if (found)
+	{
+		std::cout << "Запись найдена! \n";
+		flag = true;
+		int n;
+		while (flag)
+		{
+			PrintAction();
+			std::cin >> c;
+			try
+			{
+				n = std::stoi(c);
+				switch (n)
+				{
+				case 1:
+					std::cout << *it;
+					break;
+				case 2:
+					cont.Change(it);
+					break;
+				case 3:
+					cont.Remove(it);
+					flag = false;
+					break;
+				case 0:
+					flag = false;
+					break;
+				default:
+					std::cout << "Неверная команда!" << std::endl;
+					break;
+				}
+			}
+			catch (...)
+			{
+				std::cout << "Неверная команда!" << std::endl;
+			}
+		}
+	}
+	else
+		std::cout << "Запись не найдена \n";
+		flag = false;
+}
 
 int main()
 {
@@ -269,59 +313,21 @@ int main()
 								std::cout << "Введите номер отдела: ";
 								if (binarySearch)
 									try
-								{
-									found = cont.FindByDepartmentBinary(InputInt(), it);
-								}
-								catch (...) {
-									flag = false;
-								}
+									{
+										found = cont.FindByDepartmentBinary(InputInt(), it);
+									}
+									catch (...) {
+										flag = false;
+									}
 								else
 									try
-								{
-									found = cont.FindByDepartment(InputInt(), it);
-								}
-								catch (...) {
-									flag = false;
-								}
-								if (found)
-								{
-									std::cout << "Запись найдена! \n";
-									while (flag)
 									{
-										PrintAction();
-										std::cin >> c;
-										try
-										{
-											n = std::stoi(c);
-											switch (n)
-											{
-											case 1:
-												std::cout << *it;
-												break;
-											case 2:
-												cont.Change(it);
-												break;
-											case 3:
-												cont.Remove(it);
-												flag = false;
-												break;
-											case 0:
-												flag = false;
-												break;
-											default:
-												std::cout << "Неверная команда!" << std::endl;
-												break;
-											}
-										}
-										catch (...)
-										{
-											std::cout << "Неверная команда!" << std::endl;
-										}
+										found = cont.FindByDepartment(InputInt(), it);
 									}
-								}
-								else
-									std::cout << "Запись не найдена \n";
-								flag = false;
+									catch (...) {
+										flag = false;
+									}
+									SearchAction(found, cont, it, c, flag);
 								break;
 							case 2:
 								std::cout << "Введите фамилию: ";
@@ -342,38 +348,7 @@ int main()
 								catch (...) {
 									flag = false;
 								}
-								if (found)
-								{
-									std::cout << "Запись найдена \n";
-									PrintAction();
-									std::cin >> c;
-									try
-									{
-										n = std::stoi(c);
-										switch (n)
-										{
-										case 1:
-											std::cout << *it;
-											break;
-										case 2:
-											cont.Change(it);
-											break;
-										case 3:
-											cont.Remove(it);
-											break;
-										default:
-											std::cout << "Неверная команда!" << std::endl;
-											break;
-										}
-									}
-									catch (...)
-									{
-										std::cout << "Неверная команда!" << std::endl;
-									}
-								}
-								else
-									std::cout << "Запись не найдена \n";
-								flag = false;
+								SearchAction(found, cont, it, c, flag);
 								break;
 							case 3:
 								if (binarySearch)
@@ -392,45 +367,7 @@ int main()
 								catch (...) {
 									flag = false;
 								}
-								if (found)
-								{
-									std::cout << "Запись найдена! \n";
-									while (flag)
-									{
-										PrintAction();
-										std::cin >> c;
-										try
-										{
-											n = std::stoi(c);
-											switch (n)
-											{
-											case 1:
-												std::cout << *it;
-												break;
-											case 2:
-												cont.Change(it);
-												break;
-											case 3:
-												cont.Remove(it);
-												flag = false;
-												break;
-											case 0:
-												flag = false;
-												break;
-											default:
-												std::cout << "Неверная команда!" << std::endl;
-												break;
-											}
-										}
-										catch (...)
-										{
-											std::cout << "Неверная команда!" << std::endl;
-										}
-									}
-								}
-								else
-									std::cout << "Запись не найдена \n";
-								flag = false;
+								SearchAction(found, cont, it, c, flag);
 								break;
 							case 4:
 								std::cout << "Введите оклад: ";
@@ -450,38 +387,7 @@ int main()
 								catch (...) {
 									flag = false;
 								}
-								if (found)
-								{
-									std::cout << "Запись найдена! \n";
-									PrintAction();
-									std::cin >> c;
-									try
-									{
-										n = std::stoi(c);
-										switch (n)
-										{
-										case 1:
-											std::cout << *it;
-											break;
-										case 2:
-											cont.Change(it);
-											break;
-										case 3:
-											cont.Remove(it);
-											break;
-										default:
-											std::cout << "Неверная команда!" << std::endl;
-											break;
-										}
-									}
-									catch (...)
-									{
-										std::cout << "Неверная команда!" << std::endl;
-									}
-								}
-								else
-									std::cout << "Запись не найдена! \n";
-								flag = false;
+								SearchAction(found, cont, it, c, flag);
 								break;
 							case 0:
 								flag = false;

@@ -370,11 +370,10 @@ public:
 
 	~Container() {}
 
-	bool Add(T el) {
+	void Add(T el) {
 		//if (!Find(el))
 		//{
 			vect.push_back(el);
-			return true;
 		//}
 		//else
 		//	return false;
@@ -631,7 +630,8 @@ void ConsoleOutput(EmpContainer& cont)
 	}
 }
 
-dec::decimal<2> InputDecimal(std::string message = "", dec::decimal<2> min = (dec::decimal<2>)0, dec::decimal<2> max = (dec::decimal<2>)100000)
+dec::decimal<2> InputDecimal(std::string message = "", bool isAdd = false, dec::decimal<2> min = (dec::decimal<2>)0,
+	dec::decimal<2> max = (dec::decimal<2>)100000)
 {
 	std::string str;
 	dec::decimal<2> res;
@@ -641,6 +641,7 @@ dec::decimal<2> InputDecimal(std::string message = "", dec::decimal<2> min = (de
 		try {
 			std::cin >> str;
 			if (str == "выход") throw "выход";
+			if (str == "=" && !isAdd) return dec::decimal_cast<2>(0);
 			res = dec::decimal_cast<2>(str);
 			while (res < min || res > max) {
 				std::cout << "Ошибка (значение < " << min << " или значение > " << max << "). Повторите: " << std::endl;
@@ -648,6 +649,7 @@ dec::decimal<2> InputDecimal(std::string message = "", dec::decimal<2> min = (de
 				res = dec::decimal_cast<2>(str);
 			}
 			std::cout << std::endl;
+			//std::cin >> str;
 			return res;
 		}
 		catch (...) {
@@ -656,7 +658,7 @@ dec::decimal<2> InputDecimal(std::string message = "", dec::decimal<2> min = (de
 	}
 }
 
-int InputInt(std::string message = "", int min = 0, int max = 1000000)
+int InputInt(std::string message = "", bool isAdd = false, int min = 0, int max = 1000000)
 {
 	std::string str;
 	int res;
@@ -668,6 +670,7 @@ int InputInt(std::string message = "", int min = 0, int max = 1000000)
 		{
 			std::cin >> str;
 			if (str == "выход") throw "выход";
+			if (str == "=" && !isAdd) return 0;
 			res = std::stoi(str);
 			while (res < min || res > max)
 			{
@@ -676,6 +679,7 @@ int InputInt(std::string message = "", int min = 0, int max = 1000000)
 				res = std::stoi(str);
 			}
 			std::cout << std::endl;
+			//std::cin >> str;
 			return res;
 		}
 		catch (...)
@@ -685,7 +689,7 @@ int InputInt(std::string message = "", int min = 0, int max = 1000000)
 	}
 }
 
-Date InputDate(std::string message = "Введите дату в формате дд.мм.гггг: ") {
+Date InputDate(bool isAdd = false, std::string message = "Введите дату в формате дд.мм.гггг: ") {
 	Date date = Date();
 
 	std::string buf;
@@ -695,7 +699,7 @@ Date InputDate(std::string message = "Введите дату в формате дд.мм.гггг: ") {
 		std::cout << message;
 		std::cin >> buf;
 		if (buf == "выход") throw "выход";
-		if (buf == "=") return Date();
+		if (buf == "=" && !isAdd) return Date();
 		ok = Date::StrToDate(buf, date);
 		if (!ok)
 			std::cout << "Неверное значение!";
@@ -719,24 +723,24 @@ Employee InputEmployee()
 
 	std::cout << "Ввод информации о сотруднике" << std::endl;
 
-	_PersonnelNumber = InputInt("Табельный номер: ", 1);
+	_PersonnelNumber = InputInt("Табельный номер: ",true, 1);
 
-	_Department = InputInt("Номер отдела: ");
+	_Department = InputInt("Номер отдела: ", true);
 
 	std::cout << "Фамилия: ";
 	std::cin >> _Name;
 	std::cout << std::endl;
 
-	_Salary = InputDecimal("Оклад: ");
+	_Salary = InputDecimal("Оклад: ", true);
 
-	_EnrollmentDate = InputDate();
+	_EnrollmentDate = InputDate(true);
 
-	_Overhead = InputDecimal("Процент надбавки: ");
-	_IncomeTax = InputDecimal("Подоходный налог: ");
-	_DaysWorked = InputInt("Отработано дней: ", 0, 31);
-	_AllWorkingDays = InputInt("Рабочих дней в месяце: ", 0, 31);
-	_Accrued = InputDecimal("Начислено: ");
-	_Withheld = InputDecimal("Удержано: ");
+	_Overhead = InputDecimal("Процент надбавки: ", true);
+	_IncomeTax = InputDecimal("Подоходный налог: ", true);
+	_DaysWorked = InputInt("Отработано дней: ", true, 0, 31);
+	_AllWorkingDays = InputInt("Рабочих дней в месяце: ", true, 0, 31);
+	_Accrued = InputDecimal("Начислено: ", true);
+	_Withheld = InputDecimal("Удержано: ", true);
 
 	return Employee(_PersonnelNumber, _Department, _Name, _Salary, _EnrollmentDate, _Overhead, _IncomeTax, _DaysWorked,
 		_AllWorkingDays, _Accrued, _Withheld);
@@ -749,55 +753,42 @@ void InputEmployeChange(std::vector<Employee>::iterator &it)
 
 	std::string tmpstr = "";
 
-	std::cout << "Введите табельный номер(текущее " + std::to_string(it->PersonnelNumber) + "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=")
-		it->PersonnelNumber = std::stoi(tmpstr);
+	int tmpint = InputInt("Введите табельный номер(текущее " + std::to_string(it->PersonnelNumber) + "): ");
+	if (tmpint != 0) it->PersonnelNumber = tmpint;
 
-	std::cout << "Введите номер отдела(текущее " + std::to_string(it->Department) + "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=")
-		it->Department = std::stoi(tmpstr);
+	tmpint = InputInt("Введите номер отдела(текущее " + std::to_string(it->Department) + "): ");
+	if (tmpint != 0) it->Department = tmpint;
 	
 	std::cout << "Введите фамилию(текущее: " + it->Name + "): ";
 	std::cin >> tmpstr;
 	if (tmpstr != "=") it->Name = tmpstr;
 
-	std::cout << "Введите оклад(текущее: " << it->Salary << "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=") it->Salary = dec::decimal_cast<2>(std::stoi(tmpstr));
+	dec::decimal<2> tmpdec = InputDecimal("Введите оклад(текущее: " + dec::toString(it->Salary) + "): ");
+	if (tmpdec != dec::decimal_cast<2>(0)) it->Salary = tmpdec;
 
 	std::string datestr = it->EnrollmentDate.to_string();
-	Date dt = InputDate("Введите дату поступления(дд.мм.гггг)(текущее : " + datestr + ")");
+	Date dt = InputDate(false, "Введите дату поступления(дд.мм.гггг)(текущее : " + datestr + ")");
 	Date defDt = Date();
 	if (!(dt == defDt))
 		it->EnrollmentDate = dt;
 
-	std::cout << "Введите процент надбавки(текущее: " << it->Overhead << "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=") it->Overhead = dec::decimal_cast<2>(std::stoi(tmpstr));
+	tmpdec = InputDecimal("Введите процент надбавки(текущее: " + dec::toString(it->Overhead) + "): ");
+	if (tmpdec != dec::decimal_cast<2>(0)) it->Overhead = tmpdec;
 
-	std::cout << "Введите подоходный налог(текущее: " << it->IncomeTax << "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=") it->IncomeTax = dec::decimal_cast<2>(std::stoi(tmpstr));
+	tmpdec = InputDecimal("Введите подоходный налог(текущее: " + dec::toString(it->IncomeTax) + "): ");
+	if (tmpdec != dec::decimal_cast<2>(0)) it->IncomeTax = tmpdec;
 
-	std::cout << "Введите кол-во отработанных дней в месяце(текущее " + std::to_string(it->DaysWorked) + "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=")
-		it->DaysWorked = std::stoi(tmpstr);
+	tmpint = InputInt("Введите кол - во отработанных дней в месяце(текущее " + std::to_string(it->DaysWorked) + "): ", false, 0, 31);
+	if (tmpint != 0) it->DaysWorked = tmpint;
 
-	std::cout << "Введите кол-во рабочих дней в месяце(текущее " + std::to_string(it->AllWorkingDays) + "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=")
-		it->AllWorkingDays = std::stoi(tmpstr);
+	tmpint = InputInt("Введите кол-во рабочих дней в месяце(текущее " + std::to_string(it->AllWorkingDays) + "): ", false, 0, 31);
+	if (tmpint != 0) it->AllWorkingDays = tmpint;
 
-	std::cout << "Введите начислено(текущее: " << it->Accrued << "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=") it->Accrued = dec::decimal_cast<2>(std::stoi(tmpstr));
+	tmpdec = InputDecimal("Введите начислено(текущее: " + dec::toString(it->Accrued) + "): ");
+	if (tmpdec != dec::decimal_cast<2>(0)) it->Accrued = tmpdec;
 
-	std::cout << "Введите удержано(текущее: " << it->Withheld << "): ";
-	std::cin >> tmpstr;
-	if (tmpstr != "=") it->Withheld = dec::decimal_cast<2>(std::stoi(tmpstr));
+	tmpdec = InputDecimal("Введите удержано(текущее: " + dec::toString(it->Withheld) + "): ");
+	if (tmpdec != dec::decimal_cast<2>(0)) it->Withheld = tmpdec;
 }
 
 static void PrintHead()
