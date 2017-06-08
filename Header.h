@@ -410,7 +410,7 @@ public:
 		std::sort(vect.begin(), vect.end(), comp);
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> tmpIt;
 		tmpIt = std::lower_bound(vect.begin(), vect.end(), bibb, comp);
-		if (tmpIt == vect.end() && !comp(bibb, *tmpIt))
+		if (tmpIt == vect.end() || comp(bibb, *tmpIt))
 			return false;
 		it = tmpIt;
 		return true;
@@ -494,7 +494,7 @@ public:
 		Employee employee = Employee();
 		employee.Department = dep;
 
-		return FindByBinary(c, employee, it) && it->Department == dep;
+		return FindByBinary(c, employee, it);
 	}
 
 	bool FindByNameBinary(std::string name, std::vector<Employee>::iterator &it)
@@ -503,7 +503,7 @@ public:
 		Employee employee = Employee();
 		employee.Name = name;
 
-		return FindByBinary(c, employee, it) && it->Name == name;
+		return FindByBinary(c, employee, it);
 	}
 
 	bool FindByEnrollmentDateBinary(Date date, std::vector<Employee>::iterator &it)
@@ -512,7 +512,7 @@ public:
 		Employee employee = Employee();
 		employee.EnrollmentDate = date;
 
-		return FindByBinary(c, employee, it) && it->EnrollmentDate == date;
+		return FindByBinary(c, employee, it);
 	}
 
 	bool FindBySalaryBinary(dec::decimal<2> salary, std::vector<Employee>::iterator &it)
@@ -521,7 +521,7 @@ public:
 		Employee employee = Employee();
 		employee.Salary = salary;
 
-		return FindByBinary(c, employee, it) && it->Salary == salary;
+		return FindByBinary(c, employee, it);
 	}
 
 	EmpContainer FindSubVectByDepartment(int dep)
@@ -641,15 +641,15 @@ dec::decimal<2> InputDecimal(std::string message = "", bool isAdd = false, dec::
 		try {
 			std::cin >> str;
 			if (str == "выход") throw "выход";
-			if (str == "=" && !isAdd) return dec::decimal_cast<2>(0);
+			if (str == "=" && !isAdd) return dec::decimal_cast<2>(-1);
+			float tmpflt = std::stof(str);
 			res = dec::decimal_cast<2>(str);
-			while (res < min || res > max) {
+			while ((res < min || res > max)&&(str != "=")) {
 				std::cout << "ќшибка (значение < " << min << " или значение > " << max << "). ѕовторите: " << std::endl;
 				std::cin >> str;
 				res = dec::decimal_cast<2>(str);
 			}
 			std::cout << std::endl;
-			//std::cin >> str;
 			return res;
 		}
 		catch (...) {
@@ -670,7 +670,7 @@ int InputInt(std::string message = "", bool isAdd = false, int min = 0, int max 
 		{
 			std::cin >> str;
 			if (str == "выход") throw "выход";
-			if (str == "=" && !isAdd) return 0;
+			if (str == "=" && !isAdd) return -1;
 			res = std::stoi(str);
 			while (res < min || res > max)
 			{
@@ -679,7 +679,6 @@ int InputInt(std::string message = "", bool isAdd = false, int min = 0, int max 
 				res = std::stoi(str);
 			}
 			std::cout << std::endl;
-			//std::cin >> str;
 			return res;
 		}
 		catch (...)
@@ -754,17 +753,17 @@ void InputEmployeChange(std::vector<Employee>::iterator &it)
 	std::string tmpstr = "";
 
 	int tmpint = InputInt("¬ведите табельный номер(текущее " + std::to_string(it->PersonnelNumber) + "): ");
-	if (tmpint != 0) it->PersonnelNumber = tmpint;
+	if (tmpint != -1) it->PersonnelNumber = tmpint;
 
 	tmpint = InputInt("¬ведите номер отдела(текущее " + std::to_string(it->Department) + "): ");
-	if (tmpint != 0) it->Department = tmpint;
+	if (tmpint != -1) it->Department = tmpint;
 	
 	std::cout << "¬ведите фамилию(текущее: " + it->Name + "): ";
 	std::cin >> tmpstr;
 	if (tmpstr != "=") it->Name = tmpstr;
 
 	dec::decimal<2> tmpdec = InputDecimal("¬ведите оклад(текущее: " + dec::toString(it->Salary) + "): ");
-	if (tmpdec != dec::decimal_cast<2>(0)) it->Salary = tmpdec;
+	if (tmpdec != dec::decimal_cast<2>(-1)) it->Salary = tmpdec;
 
 	std::string datestr = it->EnrollmentDate.to_string();
 	Date dt = InputDate(false, "¬ведите дату поступлени€(дд.мм.гггг)(текущее : " + datestr + ")");
@@ -773,22 +772,22 @@ void InputEmployeChange(std::vector<Employee>::iterator &it)
 		it->EnrollmentDate = dt;
 
 	tmpdec = InputDecimal("¬ведите процент надбавки(текущее: " + dec::toString(it->Overhead) + "): ");
-	if (tmpdec != dec::decimal_cast<2>(0)) it->Overhead = tmpdec;
+	if (tmpdec != dec::decimal_cast<2>(-1)) it->Overhead = tmpdec;
 
 	tmpdec = InputDecimal("¬ведите подоходный налог(текущее: " + dec::toString(it->IncomeTax) + "): ");
-	if (tmpdec != dec::decimal_cast<2>(0)) it->IncomeTax = tmpdec;
+	if (tmpdec != dec::decimal_cast<2>(-1)) it->IncomeTax = tmpdec;
 
 	tmpint = InputInt("¬ведите кол - во отработанных дней в мес€це(текущее " + std::to_string(it->DaysWorked) + "): ", false, 0, 31);
-	if (tmpint != 0) it->DaysWorked = tmpint;
+	if (tmpint != -1) it->DaysWorked = tmpint;
 
 	tmpint = InputInt("¬ведите кол-во рабочих дней в мес€це(текущее " + std::to_string(it->AllWorkingDays) + "): ", false, 0, 31);
-	if (tmpint != 0) it->AllWorkingDays = tmpint;
+	if (tmpint != -1) it->AllWorkingDays = tmpint;
 
 	tmpdec = InputDecimal("¬ведите начислено(текущее: " + dec::toString(it->Accrued) + "): ");
-	if (tmpdec != dec::decimal_cast<2>(0)) it->Accrued = tmpdec;
+	if (tmpdec != dec::decimal_cast<2>(-1)) it->Accrued = tmpdec;
 
 	tmpdec = InputDecimal("¬ведите удержано(текущее: " + dec::toString(it->Withheld) + "): ");
-	if (tmpdec != dec::decimal_cast<2>(0)) it->Withheld = tmpdec;
+	if (tmpdec != dec::decimal_cast<2>(-1)) it->Withheld = tmpdec;
 }
 
 static void PrintHead()
