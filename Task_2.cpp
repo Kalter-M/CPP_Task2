@@ -112,7 +112,14 @@ void SubAction(EmpContainer& sub, std::string c, bool& flag)
 			break;
 		case 2:
 			FName = InputFileName();
-			sub.FileOutput(std::fstream(FName, std::ios::out));
+			try
+			{
+				sub.FileOutput(std::fstream(FName, std::ios::out));
+			}
+			catch (...)
+			{
+				std::cout << "Ошибка загрузки" << std::endl;
+			}
 			break;
 		case 0:
 			flag = false;
@@ -214,7 +221,14 @@ int main()
 							break;
 						case 2:
 							FName = InputFileName();
-							cont.FileInput(std::fstream(FName, std::ios::in));
+							try
+							{
+								cont.FileInput(std::fstream(FName, std::ios::in));
+							}
+							catch (...)
+							{
+								std::cout << "Ошибка загрузки" << std::endl;
+							}
 							flag = false;
 							break;
 						case 0:
@@ -248,7 +262,14 @@ int main()
 							break;
 						case 2:
 							FName = InputFileName();
-							cont.FileOutput(std::fstream(FName, std::ios::out));
+							try
+							{
+								cont.FileOutput(std::fstream(FName, std::ios::out));
+							}
+							catch (...)
+							{
+								std::cout << "Ошибка загрузки" << std::endl;
+							}
 							flag = false;
 							break;
 						case 0:

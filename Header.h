@@ -77,12 +77,30 @@ public:
 
 	bool operator==(const Employee& that) const
 	{
-		return	this->PersonnelNumber == that.PersonnelNumber;
+		return	this->PersonnelNumber == that.PersonnelNumber &&
+			this->Accrued == that.Accrued &&
+			this->Withheld == that.Withheld &&
+			this->DaysWorked == that.DaysWorked &&
+			this->AllWorkingDays == that.AllWorkingDays &&
+			this->Salary == that.Salary &&
+			this->Department == that.Department &&
+			this->IncomeTax == that.IncomeTax &&
+			this->Overhead == that.Overhead &&
+			this->Name == that.Name;
 	}
 
 	bool operator < (const Employee &that)
 	{
-		return this->PersonnelNumber < that.PersonnelNumber;
+		return	this->PersonnelNumber < that.PersonnelNumber &&
+			this->Accrued < that.Accrued &&
+			this->Withheld < that.Withheld &&
+			this->DaysWorked < that.DaysWorked &&
+			this->AllWorkingDays < that.AllWorkingDays &&
+			this->Salary < that.Salary &&
+			this->Department < that.Department &&
+			this->IncomeTax < that.IncomeTax &&
+			this->Overhead < that.Overhead &&
+			this->Name < that.Name;
 	}
 };
 
@@ -565,11 +583,16 @@ public:
 				emp = *is++;
 			}
 			if (emp.PersonnelNumber != 0)
-			Add(emp);
+			{
+				Add(emp);
+				fin.close();
+			}
+			else
+				throw "Ошибка загрузки";
 			fin.close();
 		}
 		else
-			std::cout << "Файл не найден!" << std::endl;
+			throw "Ошибка загрузки";
 	}
 
 	void FileOutput(std::fstream& fout)
@@ -580,7 +603,7 @@ public:
 			fout.close();
 		}
 		else
-			std::cout << "Ошибка вывода";
+			throw "Ошибка вывода";
 	}
 
 	void Output(std::ostream_iterator<Employee> os)
